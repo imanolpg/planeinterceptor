@@ -1,0 +1,22 @@
+{
+  "name": "planeinterceptor",
+  "version": "1.0.0",
+  "description": "Program to scan and visualize nearby planes with a rtl-sdr dongle.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imanolpg/planeinterceptor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imanolpg/planeinterceptor/issues"
+  },
+  "homepage": "https://github.com/imanolpg/planeinterceptor#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
