@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+#main-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+#map-template {
+    flex: 4;
+    padding: 50px;
+}
+
+#planes-template {
+    flex: 3;
+    background-color: brown;
+}
+
+#mapid {
+    height: 100%;
+    width: 100%;
+}

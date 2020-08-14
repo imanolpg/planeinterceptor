@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/imanolpg/planeinterceptor#readme",
   "dependencies": {
+    "ejs-mate": "^3.0.0",
     "express": "^4.17.1"
   }
 }
