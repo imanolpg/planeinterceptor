@@ -19,7 +19,7 @@ app.use(require('./src/routes'));
 app.use(express.static(path.join(__dirname, 'src', 'public')));
 
 //dump1090 manager
-require('./src/public/js/dump1090-manager')();
+require('./src/public/js/dump1090-controller')();
 
 // starting the server
 server.listen(3000, () => {
