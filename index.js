@@ -15,13 +15,26 @@ app.set('views', path.join(__dirname, 'src', 'views'));
 // routes
 app.use(require('./src/routes'));
 
-//static files
+// static files
 app.use(express.static(path.join(__dirname, 'src', 'public')));
 
-//dump1090 manager
-require('./src/public/js/dump1090-controller')();
+// dump1090 manager
+require('./src/public/js/dump1090-controller');
 
 // starting the server
 server.listen(3000, () => {
     console.log("Server on port 3000");
+});
+
+// exit
+process.on('uncaughtException', () => {
+    server.close();
+});
+
+process.on('SIGTERM', () => {
+    server.close();
+});
+
+process.on('exit', () => {
+    server.close();
 });
