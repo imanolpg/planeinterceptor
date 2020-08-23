@@ -70,42 +70,42 @@ function main() {
                 isOnGround: (data[21] !== "") ? parseInt(data[21]) : data[21]
             }
 
-            // TODO: manage what happens if a plane with no hexIdentification is recived
-            countInDatabase({hexIdentification: plane.hexIdentification})
-            .then( (result) => {
-                if (result === 0){
-                    insertInDatabase(plane), true;
-                    console.log("plane added")
-                } 
-                else {
-                    if (plane.messageType !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {messageType: plane.messageType});
-                    if (plane.transmissionType !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {transmissionType: plane.transmissionType});
-                    if (plane.sessionID !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {sessionID: plane.sessionID});
-                    if (plane.aircraftID !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {aircraftID: plane.aircraftID});
-                    if (plane.hexIdentification !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {flightID: plane.flightID});
-                    if (plane.dateMessageGenerated !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {dateMessageGenerated: plane.dateMessageGenerated});
-                    if (plane.timeMessageGenerated !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {timeMessageGenerated: plane.timeMessageGenerated});
-                    if (plane.dateMessageLogged !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {dateMessageLogged: plane.dateMessageLogged});
-                    if (plane.timeMessageLogged !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {timeMessageLogged: plane.timeMessageLogged});
-                    if (plane.callsign !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {callsign: plane.callsign});
-                    if (plane.altitude !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {altitude: plane.altitude});
-                    if (plane.groundSpeed !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {groundSpeed: plane.groundSpeed});
-                    if (plane.track !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {track: plane.track});
-                    if (plane.latitude !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {latitude: plane.latitude});
-                    if (plane.longitude !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {longitude: plane.longitude});
-                    if (plane.verticalRate !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {verticalRate: plane.verticalRate});
-                    if (plane.squawk !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {squawk: plane.squawk});
-                    if (plane.alertSquawkChange !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {alertSquawkChange: plane.alertSquawkChange});
-                    if (plane.emergency !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {emergency: plane.emergency});
-                    if (plane.SPIident !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {SPIident: plane.SPIident});
-                    if (plane.isOnGround !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {SPIident: plane.SPIident});
-                    console.log("plane updated")
-                }
-            })
-            .catch((err) => console.log(err));
+            if (plane.hexIdentification !== "000000" && plane.hexIdentification !== ""){
+                countInDatabase({hexIdentification: plane.hexIdentification})
+                .then( (result) => {
+                    if (result === 0){
+                        insertInDatabase(plane), true;
+                        console.log("plane added")
+                    } 
+                    else {
+                        if (plane.messageType !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {messageType: plane.messageType});
+                        if (plane.transmissionType !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {transmissionType: plane.transmissionType});
+                        if (plane.sessionID !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {sessionID: plane.sessionID});
+                        if (plane.aircraftID !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {aircraftID: plane.aircraftID});
+                        if (plane.hexIdentification !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {flightID: plane.flightID});
+                        if (plane.dateMessageGenerated !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {dateMessageGenerated: plane.dateMessageGenerated});
+                        if (plane.timeMessageGenerated !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {timeMessageGenerated: plane.timeMessageGenerated});
+                        if (plane.dateMessageLogged !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {dateMessageLogged: plane.dateMessageLogged});
+                        if (plane.timeMessageLogged !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {timeMessageLogged: plane.timeMessageLogged});
+                        if (plane.callsign !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {callsign: plane.callsign});
+                        if (plane.altitude !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {altitude: plane.altitude});
+                        if (plane.groundSpeed !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {groundSpeed: plane.groundSpeed});
+                        if (plane.track !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {track: plane.track});
+                        if (plane.latitude !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {latitude: plane.latitude});
+                        if (plane.longitude !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {longitude: plane.longitude});
+                        if (plane.verticalRate !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {verticalRate: plane.verticalRate});
+                        if (plane.squawk !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {squawk: plane.squawk});
+                        if (plane.alertSquawkChange !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {alertSquawkChange: plane.alertSquawkChange});
+                        if (plane.emergency !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {emergency: plane.emergency});
+                        if (plane.SPIident !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {SPIident: plane.SPIident});
+                        if (plane.isOnGround !== "") updateInDatabase({hexIdentification: plane.hexIdentification}, {SPIident: plane.SPIident});
+                        console.log("plane updated")
+                    }
+                })
+                .catch((err) => console.log(err));
 
-            emitter.emit('planeDetected', plane);
-
+                emitter.emit('planeDetected', plane);
+            }
         });
     }, 5000);
 }
