@@ -2,10 +2,19 @@ const express =  require('express');
 const engine = require('ejs-mate');
 const path = require('path');
 const http = require('http');
+const socketIO = require('socket.io');
+const EventEmmiter = require('events');
 
 // initializations
 const app = express();
 const server = http.createServer(app);
+const io = socketIO(server);
+const emitter = new EventEmmiter();
+
+
+module.exports = {
+    emitter
+}
 
 // settings
 app.engine('ejs', engine);
@@ -19,7 +28,21 @@ app.use(require('./src/routes'));
 app.use(express.static(path.join(__dirname, 'src', 'public')));
 
 // dump1090 manager
-require('./src/public/js/dump1090-controller');
+require('./src/js/dump1090-controller');
+
+// socket
+io.on('connection', (socket) => {
+    console.log("New socket connection");
+
+    emitter.on('planeDetected', (plane) => {
+        socket.emit('planeDetected', plane);
+    });
+});
+
+emitter.on('test', () => {
+    console.log("dentro de test");
+});
+
 
 // starting the server
 server.listen(3000, () => {
