@@ -22,8 +22,6 @@ connectDatabase = async () => {
 insertInDatabase = async (planeToInsert) => {
     if (client.isConnected())
         client.db("planeinterceptor").collection("flights").insertOne(planeToInsert).catch((err) => console.log(err));
-    else
-        console.log("client is not connected")
 }
 
 /**
@@ -34,8 +32,7 @@ insertInDatabase = async (planeToInsert) => {
  */
 updateInDatabase = async (planeToUpdate, newData) => {
     if (client.isConnected())
-        client.db("planeinterceptor").collection("flights").updateOne(planeToUpdate, {$set: newData})
-
+        client.db("planeinterceptor").collection("flights").updateOne(planeToUpdate, {$set: newData});
 }
 
 /**
@@ -68,9 +65,16 @@ countInDatabase = (options = {}) => {
 }
 
 connectDatabase();
+
+// ----------------- delete ------------------------
+//
 //setTimeout(insertInDatabase, 1000, {plane: "4", w: 2, a: 908});
 //setTimeout(updateInDatabase, 2000, {plane: "4"}, {w: 3, a: 4});
 //setTimeout(findInDatabase, 3000, {plane: "4"});
+//
+// --------------------------------------------------
+
+
 
 module.exports = {
     insertInDatabase,

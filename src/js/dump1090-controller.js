@@ -1,6 +1,7 @@
 const path = require('path');
 const { spawn, exec } = require('child_process');
 const net = require('net');
+const { emitter } = require("../../index");
 
 const { insertInDatabase, updateInDatabase, countInDatabase } = require('./database-controller');
 
@@ -23,10 +24,12 @@ function main() {
     dump1090Process.stderr.on('data', function(data) {
         if (data.toString().includes("No supported RTLSDR devices found."))
             process.kill(0);
-        console.log("ERR: " + data);
+        //console.log("ERR: " + data);
     });
 
-    dump1090Process.on('error', (err) => console.log(err));
+    dump1090Process.on('error', (err) => {
+        console.log(err)
+    });
 
     setTimeout(() => {
         
@@ -44,32 +47,34 @@ function main() {
             data = chunk.toString().replace('\r\n', '').split(',');
             plane = {
                 messageType: data[0],
-                transmissionType: data[1],
-                sessionID: data[2],
-                aircraftID: data[3],
+                transmissionType: (data[1] !== "") ? parseInt(data[1]) : data[1],
+                sessionID: data[2], // TODO: check if always is int
+                aircraftID: data[3], // TODO: check if always is int
                 hexIdentification: data[4],
-                flightID: data[5],
+                flightID: (data[5] !== "") ? parseInt(data[5]) : data[5], // TODO: check if always is int
                 dateMessageGenerated: data[6],
                 timeMessageGenerated: data[7],
                 dateMessageLogged: data[8],
                 timeMessageLogged: data[9],
                 callsign: data[10],
-                altitude: data[11],
-                groundSpeed: data[12],
-                track: data[13],
-                latitude: data[14],
-                longitude: data[15],
-                verticalRate: data[16],
-                squawk: data[17],
-                alertSquawkChange: data[18],
-                emergency: data[19],
-                SPIident: data[20],
-                isOnGround: data[21]
+                altitude: (data[11] !== "") ? parseInt(data[11]) : data[11],
+                groundSpeed: (data[12] !== "") ? parseInt(data[12]) : data[12],
+                track: (data[13] !== "") ? parseInt(data[13]) : data[13], // TODO: check if always is int
+                latitude: (data[14] !== "") ? parseFloat(data[14]) : data[14],
+                longitude: (data[15] !== "") ? parseFloat(data[15]) : data[15],
+                verticalRate: (data[16] !== "") ? parseInt(data[16]) : data[16], // TODO: check if always is int
+                squawk: (data[17] !== "") ? parseInt(data[17]) : data[17], // TODO: check if always is int
+                alertSquawkChange: (data[18] !== "") ? parseInt(data[18]) : data[18],
+                emergency: (data[19] !== "") ? parseInt(data[19]) : data[19],
+                SPIident: (data[20] !== "") ? parseInt(data[20]) : data[20],
+                isOnGround: (data[21] !== "") ? parseInt(data[21]) : data[21]
             }
+
+            // TODO: manage what happens if a plane with no hexIdentification is recived
             countInDatabase({hexIdentification: plane.hexIdentification})
             .then( (result) => {
                 if (result === 0){
-                    insertInDatabase(plane);
+                    insertInDatabase(plane), true;
                     console.log("plane added")
                 } 
                 else {
@@ -98,6 +103,9 @@ function main() {
                 }
             })
             .catch((err) => console.log(err));
+
+            emitter.emit('planeDetected', plane);
+
         });
     }, 5000);
 }
