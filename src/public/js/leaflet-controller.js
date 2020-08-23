@@ -10,7 +10,7 @@ map.locate({enableHightAccuracy: true});
 // executed when the browser gets the location
 map.on('locationfound', (data) => {
     L.marker([data.latlng.lat, data.latlng.lng]).bindPopup("You").addTo(map);
-    map.flyTo(L.latLng(data.latlng.lat, data.latlng.lng), 13, {duration: 4, noMoveStart: false});
+    map.flyTo(L.latLng(data.latlng.lat, data.latlng.lng), 10, {duration: 2, noMoveStart: false});
     socket.emit('userCoordinates', data.latlng);
 })
 
@@ -21,6 +21,16 @@ map.on('locationfound', (data) => {
  * @param {string} hexIdentification popup message
  */
 function addPlaneMarker(latitude, longitude, hexIdentification) {
+    console.log(planeMarkersList);
+    objectToRemove = undefined;
+    planeMarkersList.forEach((planeMarker) => {
+        if (planeMarker.hexIdentification === hexIdentification){
+            map.removeLayer(planeMarker.markerId);
+            objectToRemove = planeMarker;
+        }
+    });
+    planeMarkersList.splice(planeMarkersList.indexOf(objectToRemove), 1);
+
     planeIcon = L.icon({
         iconUrl: "assets/plane.png",
         iconSize: [30, 30]
@@ -52,7 +62,7 @@ function manageOldPlanes() {
     planeCards = document.querySelectorAll("div[class='planeContainer']");
     planeCards.forEach((planeCard) => {
         minuteDifference = new Date().getMinutes() - planeCard.querySelector("p[id='timeMessageLogged']").innerText.split(" ")[1].split(":")[1];
-        if (minuteDifference > 5 || minuteDifference < -55){
+        if (minuteDifference > 2 || minuteDifference < -58){
             planeCard.remove();
             objectToRemove = undefined;
             planeMarkersList.forEach((planeMarker) => {
