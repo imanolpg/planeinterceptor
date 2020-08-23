@@ -21,7 +21,6 @@ map.on('locationfound', (data) => {
  * @param {string} hexIdentification popup message
  */
 function addPlaneMarker(latitude, longitude, hexIdentification) {
-    console.log(planeMarkersList);
     objectToRemove = undefined;
     planeMarkersList.forEach((planeMarker) => {
         if (planeMarker.hexIdentification === hexIdentification){

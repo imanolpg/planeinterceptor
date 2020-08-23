@@ -15,6 +15,7 @@ html, body {
 
 #planes-template {
     flex: 3;
+    overflow-y: scroll;
 }
 
 #mapid {
@@ -25,7 +26,7 @@ html, body {
 #planesText {
     justify-content: center;
     display: flex;
-    font-size: 40px;
+    font-size: 45px;
 }
 
 .planeContainer {
