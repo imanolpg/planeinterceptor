@@ -44,7 +44,7 @@ function main() {
         });
 
         client.on('data', (chunk) => {
-            data = chunk.toString().replace('\r\n', '').split(',');
+            data = chunk.toString().replace('\n', '').replace('\r', '').split(',');
             plane = {
                 messageType: data[0],
                 transmissionType: (data[1] !== "") ? parseInt(data[1]) : data[1],

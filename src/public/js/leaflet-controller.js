@@ -1,4 +1,4 @@
-const map = L.map('mapid').setView([40.342545, -3.764699], 6);
+const map = L.map('mapid').setView([40.342545, -3.764699], 3);
 var socket = io();
 var planeMarkersList = [];
 
@@ -14,32 +14,6 @@ map.on('locationfound', (data) => {
     socket.emit('userCoordinates', data.latlng);
 })
 
-/**
- * Adds a new plane icon to the map
- * @param {number} latitude latitude for the icon
- * @param {number} longitude longitude for the icon
- * @param {string} hexIdentification popup message
- */
-function addPlaneMarker(latitude, longitude, hexIdentification) {
-    objectToRemove = undefined;
-    planeMarkersList.forEach((planeMarker) => {
-        if (planeMarker.hexIdentification === hexIdentification){
-            map.removeLayer(planeMarker.markerId);
-            objectToRemove = planeMarker;
-        }
-    });
-    planeMarkersList.splice(planeMarkersList.indexOf(objectToRemove), 1);
-
-    planeIcon = L.icon({
-        iconUrl: "assets/plane.png",
-        iconSize: [30, 30]
-    });
-
-    var markerId = L.marker([latitude, longitude], {icon: planeIcon}).addTo(map).bindPopup(hexIdentification);
-
-    planeMarkersList.push({hexIdentification: hexIdentification, markerId: markerId});
-}
-
 // executed when the socket conection with the server is established
 socket.on('connect', () => {
     console.log("socket connection established");
@@ -54,23 +28,53 @@ socket.on('planeDetected', (plane) => {
 });
 
 /**
+ * Adds a new plane icon to the map
+ * @param {number} latitude latitude for the icon
+ * @param {number} longitude longitude for the icon
+ * @param {string} hexIdentification popup message
+ */
+function addPlaneMarker(latitude, longitude, hexIdentification) {
+
+    console.log(planeMarkersList) // delete
+
+    var count = 0;
+    planeMarkersList.forEach((planeMarker) => {
+        if (planeMarker.hexIdentification === hexIdentification){
+            map.removeLayer(planeMarker.markerId);
+            planeMarkersList.splice(count, 1);
+        }
+        count = count + 1;
+    });
+
+    planeIcon = L.icon({
+        iconUrl: "assets/plane.png",
+        iconSize: [30, 30]
+    });
+    var markerId = L.marker([latitude, longitude], {icon: planeIcon}).addTo(map).bindPopup(hexIdentification);
+    planeMarkersList.push({hexIdentification: hexIdentification, markerId: markerId});
+}
+
+/**
  * Scans the plane cards in the web and deletes the ones that haven't been updated in the lasts 5 minutes.
  * It also deletes the map icons
  */
 function manageOldPlanes() {
+
+    console.log(planeMarkersList) // delete
+
     planeCards = document.querySelectorAll("div[class='planeContainer']");
     planeCards.forEach((planeCard) => {
         minuteDifference = new Date().getMinutes() - planeCard.querySelector("p[id='timeMessageLogged']").innerText.split(" ")[1].split(":")[1];
         if (minuteDifference > 2 || minuteDifference < -58){
             planeCard.remove();
-            objectToRemove = undefined;
+            count = 0;
             planeMarkersList.forEach((planeMarker) => {
                 if (planeMarker.hexIdentification === planeCard.querySelector("p[id='hexIdentification']").innerHTML.split(" ")[1]){
                     map.removeLayer(planeMarker.markerId);
-                    objectToRemove = planeMarker;
+                    planeMarkersList.splice(count, 1);
                 }
+                count = count + 1;
             });
-            planeMarkersList.splice(planeMarkersList.indexOf(objectToRemove), 1);
         }
     });
 }
@@ -175,3 +179,53 @@ function updatePlane(plane) {
 
 // ---------------- test -------------------
 //addPlaneMarker(40.362081, -3.720753, "test");
+
+/* addPlane({
+    "messageType": "MSG",
+    "transmissionType": 5,
+    "sessionID": "111",
+    "aircraftID": "11111",
+    "hexIdentification": "39CEAA",
+    "flightID": 111111,
+    "dateMessageGenerated": "22823",
+    "timeMessageGenerated": "17:36:43135",
+    "dateMessageLogged": "22823",
+    "timeMessageLogged": "17:36:431",
+    "callsign": "TVF6YH",
+    "altitude": 41,
+    "groundSpeed": 414,
+    "track": 232,
+    "latitude": 42.94318,
+    "longitude": -2.59872,
+    "verticalRate": "",
+    "squawk": 766,
+    "alertSquawkChange": "",
+    "emergency": "",
+    "SPIident": "",
+    "isOnGround": ""
+})
+
+setTimeout(addPlane, 3000, {
+    "messageType": "MSG",
+    "transmissionType": 5,
+    "sessionID": "111",
+    "aircraftID": "11111",
+    "hexIdentification": "39CEAA",
+    "flightID": 111111,
+    "dateMessageGenerated": "22823",
+    "timeMessageGenerated": "17:36:43135",
+    "dateMessageLogged": "22823",
+    "timeMessageLogged": "17:36:431",
+    "callsign": "TVF6YH",
+    "altitude": 41,
+    "groundSpeed": 414,
+    "track": 232,
+    "latitude": 42.95328,
+    "longitude": -2.60882,
+    "verticalRate": "",
+    "squawk": 766,
+    "alertSquawkChange": "",
+    "emergency": "",
+    "SPIident": "",
+    "isOnGround": ""
+}) */
