@@ -3,8 +3,8 @@ const { MongoClient } = require("mongodb");
 const client = new MongoClient("mongodb://localhost:10101", { useUnifiedTopology: true });
 
 /**
- * @async the function is asynchronous
  * Connects the client to the local MongoDB database server
+ * @async the function is asynchronous
  */
 connectDatabase = async () => {
     try {
@@ -17,7 +17,7 @@ connectDatabase = async () => {
 /**
  * Inserts in the flights colection of the database
  * @async the function is asynchronous
- * @argument planeToInsert object that will be inserted in database
+ * @argument {object} planeToInsert object that will be inserted in database
  */
 insertInDatabase = async (planeToInsert) => {
     if (client.isConnected())
@@ -27,8 +27,8 @@ insertInDatabase = async (planeToInsert) => {
 /**
  * Updates the first object that finds in the flights collection
  * @async the function is asynchronous
- * @param planeToUpdate object that contains the fields to locate the object to update
- * @param newData object with the fields and their new value
+ * @param {object} planeToUpdate object that contains the fields to locate the object to update
+ * @param {object} newData object with the fields and their new value
  */
 updateInDatabase = async (planeToUpdate, newData) => {
     if (client.isConnected())
@@ -37,7 +37,7 @@ updateInDatabase = async (planeToUpdate, newData) => {
 
 /**
  * Finds the an object in the flights collection
- * @param options fields to locate the object to return. Default {}
+ * @param {object} options fields to locate the object to return
  */
 findInDatabase = (options = {}) => {
     return new Promise ((resolve, reject) => {
@@ -52,7 +52,7 @@ findInDatabase = (options = {}) => {
 
 /**
  * Counts the amount of documents in the database with the options passed as parameter
- * @param options options to count in database. Default {}
+ * @param {object} options options to count in database. Default {}
  */
 countInDatabase = (options = {}) => {
     return new Promise((resolve, reject) => {
@@ -65,16 +65,6 @@ countInDatabase = (options = {}) => {
 }
 
 connectDatabase();
-
-// ----------------- delete ------------------------
-//
-//setTimeout(insertInDatabase, 1000, {plane: "4", w: 2, a: 908});
-//setTimeout(updateInDatabase, 2000, {plane: "4"}, {w: 3, a: 4});
-//setTimeout(findInDatabase, 3000, {plane: "4"});
-//
-// --------------------------------------------------
-
-
 
 module.exports = {
     insertInDatabase,

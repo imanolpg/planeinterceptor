@@ -2,7 +2,7 @@ const map = L.map('mapid').setView([40.342545, -3.764699], 3);
 var socket = io();
 var planeMarkersList = [];
 
-L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png').addTo(map);
+L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png').addTo(map); // map to use
 
 // asks the browser location permissions 
 map.locate({enableHightAccuracy: true});
@@ -35,8 +35,6 @@ socket.on('planeDetected', (plane) => {
  */
 function addPlaneMarker(latitude, longitude, hexIdentification) {
 
-    console.log(planeMarkersList) // delete
-
     var count = 0;
     planeMarkersList.forEach((planeMarker) => {
         if (planeMarker.hexIdentification === hexIdentification){
@@ -59,8 +57,6 @@ function addPlaneMarker(latitude, longitude, hexIdentification) {
  * It also deletes the map icons
  */
 function manageOldPlanes() {
-
-    console.log(planeMarkersList) // delete
 
     planeCards = document.querySelectorAll("div[class='planeContainer']");
     planeCards.forEach((planeCard) => {
@@ -176,56 +172,3 @@ function updatePlane(plane) {
     if(plane.latitude !== "" && plane.longitude !== "")
         addPlaneMarker(plane.latitude, plane.longitude, plane.hexIdentification);
 }
-
-// ---------------- test -------------------
-//addPlaneMarker(40.362081, -3.720753, "test");
-
-/* addPlane({
-    "messageType": "MSG",
-    "transmissionType": 5,
-    "sessionID": "111",
-    "aircraftID": "11111",
-    "hexIdentification": "39CEAA",
-    "flightID": 111111,
-    "dateMessageGenerated": "22823",
-    "timeMessageGenerated": "17:36:43135",
-    "dateMessageLogged": "22823",
-    "timeMessageLogged": "17:36:431",
-    "callsign": "TVF6YH",
-    "altitude": 41,
-    "groundSpeed": 414,
-    "track": 232,
-    "latitude": 42.94318,
-    "longitude": -2.59872,
-    "verticalRate": "",
-    "squawk": 766,
-    "alertSquawkChange": "",
-    "emergency": "",
-    "SPIident": "",
-    "isOnGround": ""
-})
-
-setTimeout(addPlane, 3000, {
-    "messageType": "MSG",
-    "transmissionType": 5,
-    "sessionID": "111",
-    "aircraftID": "11111",
-    "hexIdentification": "39CEAA",
-    "flightID": 111111,
-    "dateMessageGenerated": "22823",
-    "timeMessageGenerated": "17:36:43135",
-    "dateMessageLogged": "22823",
-    "timeMessageLogged": "17:36:431",
-    "callsign": "TVF6YH",
-    "altitude": 41,
-    "groundSpeed": 414,
-    "track": 232,
-    "latitude": 42.95328,
-    "longitude": -2.60882,
-    "verticalRate": "",
-    "squawk": 766,
-    "alertSquawkChange": "",
-    "emergency": "",
-    "SPIident": "",
-    "isOnGround": ""
-}) */
