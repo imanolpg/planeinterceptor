@@ -1,6 +1,6 @@
 # Plane Interceptor
 
-Program to scan and visualize nearby planes with a rtl-sdr dongle.
+Program to scan and visualize planes brodcasting ads-b
 
 [![Author](http://img.shields.io/badge/author-imanolpg-blue.svg)](https://github.com/imanolpg)
 [![Source Code](http://img.shields.io/badge/source-imanolpg/planeinterceptor-green.svg)](https://github.com/imanolpg/planeinterceptor)
@@ -24,7 +24,7 @@ Clone this repository ```git clone https://github.com/imanolpg/planeinterceptor`
 
 Install and compile dump1090 and set it in the enviroment path. The program sould be run from terminal.
 
-Install a MongoDB localhost server.
+Install a MongoDB localhost server. Create a database called planeinterceptor and a collection called flights. 
 
 ## Usage
 
